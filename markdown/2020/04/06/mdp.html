@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Markov Decision Process | Reinforcement Learning</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Markov Decision Process" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Reward, State, Action!" />
+<meta property="og:description" content="Reward, State, Action!" />
+<link rel="canonical" href="https://vballoli.github.io/rl-journey/markdown/2020/04/06/mdp.html" />
+<meta property="og:url" content="https://vballoli.github.io/rl-journey/markdown/2020/04/06/mdp.html" />
+<meta property="og:site_name" content="Reinforcement Learning" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-06T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Reward, State, Action!","@type":"BlogPosting","headline":"Markov Decision Process","dateModified":"2020-04-06T00:00:00-05:00","datePublished":"2020-04-06T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://vballoli.github.io/rl-journey/markdown/2020/04/06/mdp.html"},"url":"https://vballoli.github.io/rl-journey/markdown/2020/04/06/mdp.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/rl-journey/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://vballoli.github.io/rl-journey/feed.xml" title="Reinforcement Learning" /><link rel="shortcut icon" type="image/x-icon" href="/rl-journey/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Markov Decision Process | Reinforcement Learning</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Markov Decision Process" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Reward, State, Action!" />
+<meta property="og:description" content="Reward, State, Action!" />
+<link rel="canonical" href="https://vballoli.github.io/rl-journey/markdown/2020/04/06/mdp.html" />
+<meta property="og:url" content="https://vballoli.github.io/rl-journey/markdown/2020/04/06/mdp.html" />
+<meta property="og:site_name" content="Reinforcement Learning" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-06T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Reward, State, Action!","@type":"BlogPosting","headline":"Markov Decision Process","dateModified":"2020-04-06T00:00:00-05:00","datePublished":"2020-04-06T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://vballoli.github.io/rl-journey/markdown/2020/04/06/mdp.html"},"url":"https://vballoli.github.io/rl-journey/markdown/2020/04/06/mdp.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://vballoli.github.io/rl-journey/feed.xml" title="Reinforcement Learning" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/rl-journey/">Reinforcement Learning</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/rl-journey/about/">About Me</a><a class="page-link" href="/rl-journey/search/">Search</a><a class="page-link" href="/rl-journey/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Markov Decision Process</h1><p class="page-description">Reward, State, Action!</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-04-06T00:00:00-05:00" itemprop="datePublished">
+        Apr 6, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      4 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/rl-journey/categories/#markdown">markdown</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h1"><a href="#agent-environment-interface">Agent-Environment Interface</a></li>
+<li class="toc-entry toc-h1"><a href="#rewards">Rewards</a></li>
+<li class="toc-entry toc-h1"><a href="#policies-and-value-functions">Policies and Value Functions</a></li>
+</ul><p>Markov Decision Processes or MDPs as Sutton and Barto [^1] articulates it, “MDPs are a classical formalization of sequential decision making, where actions influence not just immediate rewards, but also subsequent situations, or states, and through those future rewards”. In this post, I’ll be covering the foundations of MDP problem’s mathemtatical structure and it’s applications.</p>
+
+<h1 id="agent-environment-interface">
+<a class="anchor" href="#agent-environment-interface" aria-hidden="true"><span class="octicon octicon-link"></span></a>Agent-Environment Interface</h1>
+<p><em>Agent</em> is an entity that learns and makes decision. Everything that an <em>agent</em> interacts i.e comprising everything outside the agent, is called the <em>environment</em>. In this MDP Agent-Environment framework, agent and environment interact continuosly, where the agent selects an action and the envirment responds to it. Representing them mathematically, at each timestep $t \epsilon [1, T]$, the agent receives some representation of the state $S_t$ and selects action $A_t$. One time step later, the agent receives a reward $R_{t+1}$ for action $A_t$ and the environment transitions to a new state, $S_{t+1}$ and this continuous for T timesteps.</p>
+
+<p>If these states are recorded in sequence, termed as the <em>trajectory</em> and are often represented as an array of tuples. $Trajectory = [(S_0, A_0, R_1), (S_1, A_1, R_2), …., (S_T, A_T, R_{T+1})]$. In a finite MDP, the state, action and reward (S, A, R) all have finite number of elements. As opposed to the bandit problem, the value function for an MDP is a function of the state and the action i.e $q_*(s, a)$. In the case of finite MDPs, the random variables $R_t$ and $S_t$ have discrete probability distributions based on preceding state and action. That is:</p>
+
+<p>$ p(s’,r \mid s, a) = Pr { S_t = s’, R_t=r \mid S_{t-1}=s, A_{t-1}=a } $</p>
+
+<p>Logically, sum of probability of all possible rewards at all states at a given state should be 1.</p>
+
+<p>$ \Sigma_{s’\in S}\Sigma_{r \in R}p(s’,r \mid s, a) = 1,  \forall s \in S, a \in A $</p>
+
+<p><em>In a Markov decision process, the probabilities given by p completely characterize the environment’s dynamics. That is, the probability of each possible value for St and Rt depends only on the immediately preceding state and action, St 1 and At 1, and, given them, not at all on earlier states and actions. This is best viewed a restriction not on the decision process, but on the state. The state must include information about all aspects of the past agent–environment interaction that make a di↵erence for the future. If it does, then the state is said to have the Markov property</em></p>
+
+<p><strong>State-transition probability</strong>:</p>
+<blockquote>
+  <p>$ p(s’\mid s,a) = \Sigma_{r\in R}p(s’,r\mid s,a) $</p>
+</blockquote>
+
+<p><strong>Expected reward r(s,a)</strong>:</p>
+<blockquote>
+  <p>$ r(s,a) = E[R_{t+1} \mid S_t=s, A_t=a] = \Sigma_{r \in R}r\Sigma_{s’ \in S} p(s’,r \mid s,a) $</p>
+</blockquote>
+
+<p><strong>Expected reward r(s’,s,a)</strong>:</p>
+<blockquote>
+  <p>$ r(s,a) = \Sigma_{r \in R} \frac{p(s’,r \mid s,a)}{p(s’ \mid s,a)} $</p>
+</blockquote>
+
+<p><em>The agent–environment boundary represents the limit of the agent’s absolute control, not of its knowledge.</em></p>
+
+<h1 id="rewards">
+<a class="anchor" href="#rewards" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rewards</h1>
+<p>Rewards are a formalized signal to define the purpose/goal of the agent, that’s passed to the agent from the environment. Indirectly, this means the goal of the agent is to maximize the reward received.</p>
+
+<p><strong>Reward hypothesis</strong>: <em>That all of what we mean by goals and purposes can be well thought of as the maximization of the expected value of the cumulative sum of a received scalar signal (called reward).</em></p>
+
+<p><strong>The reward signal is a way to communicate to the agent what the goal is, not how to achieve the goal</strong>. Since we deal with expected rewards and maximizing these rewards, we denote <em>expected return</em> as $G_t$. $G_t$ can be anything - from a linear combination of all future rewards i.e. $G_t = R_{t+1} + R_{t+2} + R_{t+3} … + R_{T}$ to some exponential combination, where $T$ is the final timestep.</p>
+
+<p>Based on $T$, we can classify any learning task into 2:</p>
+<ol>
+  <li>Episodic task - Task where each <em>episode</em> has an end-point(terminal state) i.e $T$ is finite.</li>
+  <li>Continuing task - The task continues without any definitive limit i.e $ T \rightarrow \infty $</li>
+</ol>
+
+<p><strong>Reward discounting</strong>: By introducing a factor $\gamma$, we bring in the concept of <em>discounting</em> future rewards - $G_t = R_{t+1} + \gamma R_{t+1} + \gamma^2 R_{t+2} + …..$ where $\gamma \in [0, 1)$.
+<strong>The discount parameter signifies means how much the future rewards are worth in our current decision making process based on how far in the future they are</strong></p>
+<ul>
+  <li>$\gamma = 0$ - Mypoic(only immediate rewards matter)</li>
+  <li>$\gamma = 1$ - All future rewards carry the same weight.</li>
+</ul>
+
+<p>For both episodic and continuing tasks, $G_t$ is defined as:</p>
+
+<blockquote>
+  <p>$G_t = \Sigma_{i=t+1} \gamma^{i-t-1}R_i$</p>
+</blockquote>
+
+<h1 id="policies-and-value-functions">
+<a class="anchor" href="#policies-and-value-functions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Policies and Value Functions</h1>
+<p><em>A policy is a mapping from states to probabilities of selecting each possible action. If the agent is following policy $\pi$ at time t, then $\pi(a\mid s)$ is the probability that $A_t = a$ if $S_t = s$</em>.</p>
+
+<p>Value function can now be defined at a given state under a policy $\pi$ as:</p>
+
+<p><strong>State-value function</strong> $ v_\pi(s) = E[G_t \mid S_t=s] = E_\pi[\Sigma_{k=0} \gamma^kR_{t+k+1} \mid S_t=s] $</p>
+
+<p>Similary, value function of taking action $a$ at a state under policy $\pi$ is defined as:</p>
+
+<p><strong>Action-value function</strong> $ q_\pi(a,s) = E_\pi[G_t \mid S_t=s, A_t=a] = E_\pi[\Sigma_{k=0} \gamma^kR_{t+k+1} \mid S_t=s, A_t=a] $</p>
+
+<blockquote>
+  <p>$ v_\pi(s) = E_\pi[G_t\mid S_t=s] $
+$ v_\pi(s) = E_\pi[R_{t+1} + \gamma G_{t+1}]\mid S_t=s] $
+$ v_\pi(s) = \Sigma_a \pi(a\mid s) \Sigma_{s’,r}p(s’,r \mid s,a)[r + \gamma v_\pi(s)] $</p>
+</blockquote>
+
+  </div><a class="u-url" href="/rl-journey/markdown/2020/04/06/mdp.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/rl-journey/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/rl-journey/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/rl-journey/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>A blog to track my journey in Reinforcement Learning</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/vballoli" title="vballoli"><svg class="svg-icon grey"><use xlink:href="/rl-journey/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/v_balloli" title="v_balloli"><svg class="svg-icon grey"><use xlink:href="/rl-journey/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
