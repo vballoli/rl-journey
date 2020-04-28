@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Dynamic Programming in RL | Reinforcement Learning</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Dynamic Programming in RL" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Reward, State, Action!" />
+<meta property="og:description" content="Reward, State, Action!" />
+<link rel="canonical" href="https://vballoli.github.io/rl-journey/markdown/2020/04/23/dynamic_programming.html" />
+<meta property="og:url" content="https://vballoli.github.io/rl-journey/markdown/2020/04/23/dynamic_programming.html" />
+<meta property="og:site_name" content="Reinforcement Learning" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-23T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Reward, State, Action!","@type":"BlogPosting","headline":"Dynamic Programming in RL","dateModified":"2020-04-23T00:00:00-05:00","datePublished":"2020-04-23T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://vballoli.github.io/rl-journey/markdown/2020/04/23/dynamic_programming.html"},"url":"https://vballoli.github.io/rl-journey/markdown/2020/04/23/dynamic_programming.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/rl-journey/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://vballoli.github.io/rl-journey/feed.xml" title="Reinforcement Learning" /><link rel="shortcut icon" type="image/x-icon" href="/rl-journey/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Dynamic Programming in RL | Reinforcement Learning</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Dynamic Programming in RL" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Reward, State, Action!" />
+<meta property="og:description" content="Reward, State, Action!" />
+<link rel="canonical" href="https://vballoli.github.io/rl-journey/markdown/2020/04/23/dynamic_programming.html" />
+<meta property="og:url" content="https://vballoli.github.io/rl-journey/markdown/2020/04/23/dynamic_programming.html" />
+<meta property="og:site_name" content="Reinforcement Learning" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-23T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Reward, State, Action!","@type":"BlogPosting","headline":"Dynamic Programming in RL","dateModified":"2020-04-23T00:00:00-05:00","datePublished":"2020-04-23T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://vballoli.github.io/rl-journey/markdown/2020/04/23/dynamic_programming.html"},"url":"https://vballoli.github.io/rl-journey/markdown/2020/04/23/dynamic_programming.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://vballoli.github.io/rl-journey/feed.xml" title="Reinforcement Learning" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/rl-journey/">Reinforcement Learning</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/rl-journey/about/">About Me</a><a class="page-link" href="/rl-journey/search/">Search</a><a class="page-link" href="/rl-journey/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Dynamic Programming in RL</h1><p class="page-description">Reward, State, Action!</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-04-23T00:00:00-05:00" itemprop="datePublished">
+        Apr 23, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      3 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/rl-journey/categories/#markdown">markdown</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h1"><a href="#policy-evaluation">Policy Evaluation</a></li>
+<li class="toc-entry toc-h1"><a href="#policy-improvement">Policy improvement</a></li>
+<li class="toc-entry toc-h1"><a href="#policy-iteration">Policy iteration</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#algorithm">Algorithm</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h1"><a href="#value-iteration">Value Iteration</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#algorithm-1">Algorithm</a></li>
+</ul>
+</li>
+</ul><table>
+  <tbody>
+    <tr>
+      <td>Recall that the state-value function for an arbitrary policy \pi is given by: $v_\pi(s) = \Sigma_a\pi(a \mid s) \Sigma_{s’,r}p(s’,r</td>
+      <td>s,a)[r + \gamma v_\pi(s’)]$. If the dynamics of the environment is given, the problem simplifies to solving a system of linear equations with $</td>
+      <td>S</td>
+      <td>$ equations, but requires tedious computation. Hence, iterative solution methods to save the day.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><em>The key idea is of RL in general is to use value functions and structure the search for good policies.</em> Optimal value functions are given by the bellman equations:</p>
+
+<ol>
+  <li>$v_<em>(s) = max_a\sum_{s’, r}p(s’,r\mid s,a)[r + \gamma v_</em>(s’)]$</li>
+  <li>$q_<em>(s, a) = \sum_{s’,r}p(s’,r\mid s,a)[r + \gamma max_{a’}q_</em>(s’,a’)]$</li>
+</ol>
+
+<p>Using these equations as update rules, Dynamic Programming algorithms are obtained.</p>
+
+<h1 id="policy-evaluation">
+<a class="anchor" href="#policy-evaluation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Policy Evaluation</h1>
+<p>Policy evaluation simply means computing the state-value function $v_\pi(s)$ for a policy $\pi$. From the bellman equation: $v_{\pi}(s) = \sum_a\p(a\mid s) \sum_{s’,r}p(s’,r\mid s,a)[r + \gamma \v_\pi{s’}]$. 
+So, let’s assume an arbitrary value function $v_0$ that initializes every state to an arbitray value execpt the terminal state, which must be 0. Now, applying the bellman equation to $v_0$, let the new value function be $v_1$ i.e. $v_1(s) = \sum_ap(a\mid s) \sum_{s’,r}p(s’,r\mid s,a)[r + \gamma \v_0{s’}]$. But, if $v_0$ was actually $v_\pi$ ,then $v_1(s)$ must be equal to $v_\pi(s)$. Continuing this equation, if $v_0$ is replaced by $v_1$ and the result is $v_2$, the same condition must hold. Hence, generalizing this update,
+<span class="katex-error" title="ParseError: KaTeX parse error: Can't use function '\v' in math mode at position 70: …,a)[r + \gamma \̲v̲_{k}{s'}]" style="color:#cc0000">v_{k+1}(s) = \sum_a\p(a\mid s) \sum_{s',r}p(s',r\mid s,a)[r + \gamma \v_{k}{s'}]</span>, as $k \rightarrow \infty$, $v_k(s) \rightarrow v_\pi(s)$</p>
+
+<h1 id="policy-improvement">
+<a class="anchor" href="#policy-improvement" aria-hidden="true"><span class="octicon octicon-link"></span></a>Policy improvement</h1>
+<p>Policy improvement, as the name suggests, algorithmically tries to find a better policy given an arbitrary policy $\pi$ or as the book suggests, <em>would it be better or worse to change the policy at a given state $s$ following $\pi$.</em> This can be done using equation 2 from the bellman equations.</p>
+
+<p>Policy improvement is defined as for two deterministic policies $\pi$ and $\pi^{‘}$, $\pi^’$ is said to be better than $\pi$ if: $q(s, \pi^’(s)) \geq v_\pi(s)$. Therefore $v_{\pi^’}(s) \geq v_{\pi}(s)$. Similarly applying the bellman equation for policy update, we obtain:</p>
+<blockquote>
+  <p>$\pi^’(s) = argmax_a(\sum_{s’,r}p(s’,r\mid s, a)[r + \gamma v_\pi(s’)])$</p>
+</blockquote>
+
+<p>and therefore</p>
+
+<blockquote>
+  <p>$v_{\pi^’}(s) = max_a(\sum_{s’,r}p(s’,r\mid s,a)[r + \gamma v_{\pi^’}(s’)])$</p>
+</blockquote>
+
+<h1 id="policy-iteration">
+<a class="anchor" href="#policy-iteration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Policy iteration</h1>
+<p>Now, given an arbitrary policy, we can now arrive at an approach to find a better policy by</p>
+<ol>
+  <li>Evaluating the current policy(using Policy evaluation)</li>
+  <li>Improving the current policy(using Policy impprovement)</li>
+</ol>
+
+<h2 id="algorithm">
+<a class="anchor" href="#algorithm" aria-hidden="true"><span class="octicon octicon-link"></span></a>Algorithm</h2>
+<ol>
+  <li>Initialization $V(s) \in R$, $\pi(s) \in A(s),  \forall s \in S$</li>
+  <li>Policy evaluation
+    <ul>
+      <li>$\Delta \leftarrow 0$</li>
+      <li>for each $s \in S$:
+        <ul>
+          <li>$v \leftarrow V(s)$</li>
+          <li>$V(s) \leftarrow \sum_{s’,r}p(s’,r\mid s,\pi(s))[r + \gamma \V{s’}]$</li>
+          <li>$\Delta \leftarrow max(\Delta, \mid v - V(s) \mid)
+ until  $\Delta &lt; \theta$</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Policy iteration
+    <ul>
+      <li>policy_stable $\leftarrow$ True</li>
+      <li>for each $s \in S$
+        <ul>
+          <li>old_action $\leftarrow \pi(s)$</li>
+          <li>$\pi^(s) = argmax_a(\sum_{s’,r}p(s’,r\mid s, a)[r + \gamma v_\pi(s’)])$</li>
+          <li>if old_action != $\pi(s)$, then policy_stable $\leftarrow$ False.</li>
+        </ul>
+      </li>
+      <li>if policy_stalbe == True, return $v_<em>$, $\pi_</em>$</li>
+    </ul>
+  </li>
+  <li>Repeat</li>
+</ol>
+
+<p>Problem: Each iteration requires evaluation and improvement, which is expensive since policy evaluation itself involves multiple iterations of sweeps through a state set. Hence, <strong>value iteration</strong>.</p>
+
+<h1 id="value-iteration">
+<a class="anchor" href="#value-iteration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Value Iteration</h1>
+<p>Value iteration truncates the policy evaluation part of the policy iteration algorithm. The idea is to solve the previous problem of multiple state visits in the evaluation stage. This is solved by maximizing the value function of a given state by visiting all posible actions and weighing each of their values through the transition probability, which in turn reduces the need for policy iteration. Hence, the algorithm now becomes:</p>
+
+<h2 id="algorithm-1">
+<a class="anchor" href="#algorithm-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Algorithm</h2>
+<ol>
+  <li>Initialization $V(s) \in R$, $\pi(s) \in A(s),  \forall s \in S$</li>
+  <li>Policy evaluation
+    <ul>
+      <li>$\Delta \leftarrow 0$</li>
+      <li>for each $s \in S$:
+        <ul>
+          <li>$v \leftarrow V(s)$</li>
+          <li>$V(s) \leftarrow \max_a \sum_{s’,r}p(s’,r\mid s,a)[r + \gamma V{s’}]$</li>
+          <li>$\Delta \leftarrow max(\Delta, \mid v - V(s) \mid)
+ until  $\Delta &lt; \theta$</li>
+        </ul>
+      </li>
+      <li>$\pi(s) = argmax_a\sum_{s’,r} p(s’,r\mid s,a)[r + \gamma V(s’)]</li>
+    </ul>
+  </li>
+  <li>Repeat</li>
+</ol>
+
+<p>This algorithm also converges to the ideal policy after a long time, but reduces the complexity in comparison to Policy iteration.</p>
+
+  </div><a class="u-url" href="/rl-journey/markdown/2020/04/23/dynamic_programming.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/rl-journey/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/rl-journey/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/rl-journey/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>A blog to track my journey in Reinforcement Learning</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/vballoli" title="vballoli"><svg class="svg-icon grey"><use xlink:href="/rl-journey/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/v_balloli" title="v_balloli"><svg class="svg-icon grey"><use xlink:href="/rl-journey/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
