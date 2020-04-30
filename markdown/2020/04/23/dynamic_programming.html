@@ -136,31 +136,25 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#algorithm-1">Algorithm</a></li>
 </ul>
 </li>
-</ul><table>
-  <tbody>
-    <tr>
-      <td>Recall that the state-value function for an arbitrary policy \pi is given by: $v_\pi(s) = \Sigma_a\pi(a \mid s) \Sigma_{s’,r}p(s’,r</td>
-      <td>s,a)[r + \gamma v_\pi(s’)]$. If the dynamics of the environment is given, the problem simplifies to solving a system of linear equations with $</td>
-      <td>S</td>
-      <td>$ equations, but requires tedious computation. Hence, iterative solution methods to save the day.</td>
-    </tr>
-  </tbody>
-</table>
+</ul><p>Recall that the state-value function for an arbitrary policy $\pi$ is given by: $v_\pi(s) = \Sigma_a\pi(a \mid s) \Sigma_{s’,r}p(s’,r\mid s,a)[r + \gamma v_\pi(s’)]$. If the dynamics of the environment is given, the problem simplifies to solving a system of linear equations with $\mid S\mid$ equations, but requires tedious computation. Hence, iterative solution methods to save the day.</p>
 
 <p><em>The key idea is of RL in general is to use value functions and structure the search for good policies.</em> Optimal value functions are given by the bellman equations:</p>
 
-<ol>
-  <li>$v_<em>(s) = max_a\sum_{s’, r}p(s’,r\mid s,a)[r + \gamma v_</em>(s’)]$</li>
-  <li>$q_<em>(s, a) = \sum_{s’,r}p(s’,r\mid s,a)[r + \gamma max_{a’}q_</em>(s’,a’)]$</li>
-</ol>
+<blockquote>
+  <p>$v_<em>(s) = max_a\sum_{s’, r}p(s’,r\mid s,a)[r + \gamma v_</em>(s’)]$<br>
+$q_<em>(s, a) = \sum_{s’,r}p(s’,r\mid s,a)[r + \gamma max_{a’}q_</em>(s’,a’)]$</p>
+</blockquote>
 
 <p>Using these equations as update rules, Dynamic Programming algorithms are obtained.</p>
 
 <h1 id="policy-evaluation">
 <a class="anchor" href="#policy-evaluation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Policy Evaluation</h1>
-<p>Policy evaluation simply means computing the state-value function $v_\pi(s)$ for a policy $\pi$. From the bellman equation: $v_{\pi}(s) = \sum_a\p(a\mid s) \sum_{s’,r}p(s’,r\mid s,a)[r + \gamma \v_\pi{s’}]$. 
-So, let’s assume an arbitrary value function $v_0$ that initializes every state to an arbitray value execpt the terminal state, which must be 0. Now, applying the bellman equation to $v_0$, let the new value function be $v_1$ i.e. $v_1(s) = \sum_ap(a\mid s) \sum_{s’,r}p(s’,r\mid s,a)[r + \gamma \v_0{s’}]$. But, if $v_0$ was actually $v_\pi$ ,then $v_1(s)$ must be equal to $v_\pi(s)$. Continuing this equation, if $v_0$ is replaced by $v_1$ and the result is $v_2$, the same condition must hold. Hence, generalizing this update,
-<span class="katex-error" title="ParseError: KaTeX parse error: Can't use function '\v' in math mode at position 70: …,a)[r + \gamma \̲v̲_{k}{s'}]" style="color:#cc0000">v_{k+1}(s) = \sum_a\p(a\mid s) \sum_{s',r}p(s',r\mid s,a)[r + \gamma \v_{k}{s'}]</span>, as $k \rightarrow \infty$, $v_k(s) \rightarrow v_\pi(s)$</p>
+<p>Policy evaluation simply means computing the state-value function $v_\pi(s)$ for a policy $\pi$. From the bellman equation: $v_{\pi}(s) = \sum_a p(a\mid s) \sum_{s’,r}p(s’,r\mid s,a)[r + \gamma v_\pi{s’}]$. 
+So, let’s assume an arbitrary value function $v_0$ that initializes every state to an arbitray value execpt the terminal state, which must be 0. Now, applying the bellman equation to $v_0$, let the new value function be $v_1$ i.e. $v_1(s) = \sum_ap(a\mid s) \sum_{s’,r}p(s’,r\mid s,a)[r + \gamma v_0(s’)]$. But, if $v_0$ was actually $v_\pi$ ,then $v_1(s)$ must be equal to $v_\pi(s)$. Continuing this equation, if $v_0$ is replaced by $v_1$ and the result is $v_2$, the same condition must hold. Hence, generalizing this update,</p>
+<blockquote>
+  <p>$v_{k+1}(s) = \sum_a\p(a\mid s) \sum_{s’,r}p(s’,r\mid s,a)[r + \gamma \v_{k}{s’}]$,
+ as $k \rightarrow \infty$, $v_k(s) \rightarrow v_\pi(s)$</p>
+</blockquote>
 
 <h1 id="policy-improvement">
 <a class="anchor" href="#policy-improvement" aria-hidden="true"><span class="octicon octicon-link"></span></a>Policy improvement</h1>
