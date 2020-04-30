@@ -6,19 +6,20 @@ categories: [markdown]
 title: Dynamic Programming in RL
 ---
 
-Recall that the state-value function for an arbitrary policy \pi is given by: $v_\pi(s) = \Sigma_a\pi(a \mid s) \Sigma_{s',r}p(s',r|s,a)[r + \gamma v_\pi(s')]$. If the dynamics of the environment is given, the problem simplifies to solving a system of linear equations with $ |S| $ equations, but requires tedious computation. Hence, iterative solution methods to save the day.
+Recall that the state-value function for an arbitrary policy $\pi$ is given by: $v_\pi(s) = \Sigma_a\pi(a \mid s) \Sigma_{s',r}p(s',r\mid s,a)[r + \gamma v_\pi(s')]$. If the dynamics of the environment is given, the problem simplifies to solving a system of linear equations with $\mid S\mid$ equations, but requires tedious computation. Hence, iterative solution methods to save the day.
 
 *The key idea is of RL in general is to use value functions and structure the search for good policies.* Optimal value functions are given by the bellman equations:
 
-1. $v_*(s) = max_a\sum_{s', r}p(s',r\mid s,a)[r + \gamma v_*(s')]$  
-2. $q_*(s, a) = \sum_{s',r}p(s',r\mid s,a)[r + \gamma max_{a'}q_*(s',a')]$
+> $v_*(s) = max_a\sum_{s', r}p(s',r\mid s,a)[r + \gamma v_*(s')]$  
+> $q_*(s, a) = \sum_{s',r}p(s',r\mid s,a)[r + \gamma max_{a'}q_*(s',a')]$
 
 Using these equations as update rules, Dynamic Programming algorithms are obtained.
 
 # Policy Evaluation
-Policy evaluation simply means computing the state-value function $v_\pi(s)$ for a policy $\pi$. From the bellman equation: $v_{\pi}(s) = \sum_a\p(a\mid s) \sum_{s',r}p(s',r\mid s,a)[r + \gamma \v_\pi{s'}]$. 
-So, let's assume an arbitrary value function $v_0$ that initializes every state to an arbitray value execpt the terminal state, which must be 0. Now, applying the bellman equation to $v_0$, let the new value function be $v_1$ i.e. $v_1(s) = \sum_ap(a\mid s) \sum_{s',r}p(s',r\mid s,a)[r + \gamma \v_0{s'}]$. But, if $v_0$ was actually $v_\pi$ ,then $v_1(s)$ must be equal to $v_\pi(s)$. Continuing this equation, if $v_0$ is replaced by $v_1$ and the result is $v_2$, the same condition must hold. Hence, generalizing this update,
-$$v_{k+1}(s) = \sum_a\p(a\mid s) \sum_{s',r}p(s',r\mid s,a)[r + \gamma \v_{k}{s'}]$$, as $k \rightarrow \infty$, $v_k(s) \rightarrow v_\pi(s)$
+Policy evaluation simply means computing the state-value function $v_\pi(s)$ for a policy $\pi$. From the bellman equation: $v_{\pi}(s) = \sum_a p(a\mid s) \sum_{s’,r}p(s’,r\mid s,a)[r + \gamma v_\pi{s’}]$. 
+So, let's assume an arbitrary value function $v_0$ that initializes every state to an arbitray value execpt the terminal state, which must be 0. Now, applying the bellman equation to $v_0$, let the new value function be $v_1$ i.e. $v_1(s) = \sum_ap(a\mid s) \sum_{s’,r}p(s’,r\mid s,a)[r + \gamma v_0(s')]$. But, if $v_0$ was actually $v_\pi$ ,then $v_1(s)$ must be equal to $v_\pi(s)$. Continuing this equation, if $v_0$ is replaced by $v_1$ and the result is $v_2$, the same condition must hold. Hence, generalizing this update,
+> $v_{k+1}(s) = \sum_a\p(a\mid s) \sum_{s',r}p(s',r\mid s,a)[r + \gamma \v_{k}{s'}]$,
+ as $k \rightarrow \infty$, $v_k(s) \rightarrow v_\pi(s)$
 
 # Policy improvement
 Policy improvement, as the name suggests, algorithmically tries to find a better policy given an arbitrary policy $\pi$ or as the book suggests, *would it be better or worse to change the policy at a given state $s$ following $\pi$.* This can be done using equation 2 from the bellman equations.
